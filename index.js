@@ -1,30 +1,39 @@
-let i =0;
-let score = 0
-const pairbutton = document.getElementById('pair')
-const impairbutton = document.getElementById('impair')
-const number = +document.getElementsByClassName('number')[0].innerHTML
-const arr = Array.from(Array(10)).map(() => {
-    return Math.floor(Math.random() * 100)
-})
-function pOrI(e){
-    if(number%2 == 0 && e=='pair' ){
-        score++;
+const pairbutton = document.querySelector('#pair')
+const number = document.querySelector('#number')
+const score = document.querySelector('#score')
+const impairbutton = document.querySelector('#impair')
+const randomNumber = () => {
+    return Math.floor(Math.random()*100)
+}
+number.innerHTML = randomNumber()
+const start = new Date().getTime();
+const clickOnPair = () => {
+    number.innerHTML%2 ? null : score.innerHTML++
+    number.innerHTML = randomNumber()
+    if(score.innerHTML == 10){
+        window.alert('your time is ' +(new Date().getTime()-start)/1000 + ' s')
+        score.innerHTML = 0
+        clearInterval(myTimer);
+        myTimer = setInterval(() => {
+            number.innerHTML = randomNumber()
+        },3000);
     }
-    if(e=='impair' && number%2 !== 0){
-        score++;
+}
+const clickOnImpair = () => {
+    number.innerHTML%2 ?  score.innerHTML++ : null
+    number.innerHTML = randomNumber()
+    if(score.innerHTML == 10){
+        window.alert('Game Over')
+        score.innerHTML = 0
     }
-    impairbutton.disabled = true
-    pairbutton.disabled = true
-    }
+    clearInterval(myTimer);
+    myTimer = setInterval(() => {
+        number.innerHTML = randomNumber()
+    },3000);
+}
+ var myTimer = setInterval(() => {
+    number.innerHTML = randomNumber()
+},3000);
 
-setInterval(
-    function () {
-        if(i==10){
-            document.getElementsByTagName('body')[0].innerHTML = `<h1>Game Over</h1> your score ${score}/10 `
-        }else{
-         document.getElementsByClassName('score')[0].innerHTML = score
-        document.getElementsByClassName('number')[0].innerHTML = arr[i++]
-        impairbutton.disabled = false
-        pairbutton.disabled = false
-    }
-},500);
+pairbutton.addEventListener("click", clickOnPair);
+impairbutton.addEventListener("click", clickOnImpair);
